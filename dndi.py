@@ -11,6 +11,7 @@ import pyinotify
 import sys
 from event_handler import EventHandler
 import time
+from queue import Queue
 
 def getHash(file):
 	try:
@@ -69,8 +70,8 @@ wm = pyinotify.WatchManager()
 mask = pyinotify.IN_CREATE | pyinotify.IN_DELETE #| pyinotify.IN_MODIFY | pyinotify.IN_DELETE
 
 
-lista = []
-handler = EventHandler(lista)
+queue = []
+handler = EventHandler(queue)
 notifier = pyinotify.Notifier(wm, handler)
 wdd = wm.add_watch(path, mask, rec=True)
 
@@ -82,7 +83,8 @@ def process(notifier):
 	#deberia poder procesar los eventos, obteniendo los datos
 	if(notifier.check_events()):
 		print("Nuevo evento")
-		print(lista)
+		if len(queue) != 0:
+			print(queue.pop(0))
 	#	notifier.read_events()
 	#	notifier.process_events()
 	#	print(notifier.read_events())
