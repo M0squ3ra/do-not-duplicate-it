@@ -59,8 +59,8 @@ class Btree:
 					parent_node.setLeft(new)
 				else:
 					parent_node.setRight(new)
-					new.setParent(parent_node)
-					
+				new.setParent(parent_node)
+		
 				return None
 			else:
 				return (curr_node.getLabel(),curr_node.getPath(),new.getLabel(),new.getPath())
