@@ -10,9 +10,9 @@ path = "/home/lol/Escritorio/do-not-duplicate-it/pruebas"
 tree,rep,dirs = initTree(path)
 
 wm = pyinotify.WatchManager()
-mask = pyinotify.IN_CREATE | pyinotify.IN_DELETE #| pyinotify.IN_MODIFY | pyinotify.IN_DELETE
+mask = pyinotify.IN_CREATE | pyinotify.IN_DELETE 
 
-handler = EventHandler(tree)
+handler = EventHandler(tree,rep)
 notifier = pyinotify.Notifier(wm, handler)
 wdd = wm.add_watch(path, mask, rec=True)
 
