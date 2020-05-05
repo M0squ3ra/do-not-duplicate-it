@@ -68,7 +68,9 @@ for i in rep:
 wm = pyinotify.WatchManager()
 mask = pyinotify.IN_CREATE | pyinotify.IN_DELETE #| pyinotify.IN_MODIFY | pyinotify.IN_DELETE
 
-handler = EventHandler()
+
+lista = []
+handler = EventHandler(lista)
 notifier = pyinotify.Notifier(wm, handler)
 wdd = wm.add_watch(path, mask, rec=True)
 
@@ -80,6 +82,7 @@ def process(notifier):
 	#deberia poder procesar los eventos, obteniendo los datos
 	if(notifier.check_events()):
 		print("Nuevo evento")
+		print(lista)
 	#	notifier.read_events()
 	#	notifier.process_events()
 	#	print(notifier.read_events())
