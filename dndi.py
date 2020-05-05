@@ -4,48 +4,23 @@
 #agregar una opcion verbose para ver cambios en carpetas ademas de si hay duplicados (-v)
 
 from btree import Btree
-from os import listdir
-from os.path import isdir,isfile
-from hashlib import md5
 import pyinotify
 import sys
 from event_handler import EventHandler
 import time
 from queue import Queue
-
-def getHash(file):
-	try:
-		hashmd5 = md5()
-		with open(file,"rb") as f:
-			for block in iter(lambda: f.read(4096),b""):
-				hashmd5.update(block)
-		return hashmd5.hexdigest()
-	except Exception as e:
-		print("Error: %s" % (e))
-		return ""
-	except:
-		print("Unknown error")
-		return ""
+from util import *
 
 
-def getFiles(path):
-	dirs = []
+def initTree(path):
+	tree = Btree()
+	dirs = getDirs(path)
+	dirs = [path] + dirs
 	files = []
-	for i in listdir(path):
-		if isdir(i):
-			dirs.append(path + "/" + i)
-		else:
-			if isfile(i):
-				files.append(path + "/" + i)
 
 	for j in dirs:
 		files = files + getFiles(j)
 
-	return files
-
-def initTree(path):
-	tree = Btree()
-	files = getFiles(path)
 	rep = []
 
 	for i in files:
@@ -53,41 +28,26 @@ def initTree(path):
 		if state != None:
 			rep.append(state)
 
-	return tree,rep
+	for i in rep:
+		printRep(i[1],i[3],i[0])
 
-def printRep(parent,copy,hash):
-	print("[**] " + parent + " == " + copy + " --> " + hash)
+	return tree,rep,dirs
 
-path = "."
+path = "/home/lol/Escritorio/do-not-duplicate-it/pruebas"
 
-tree,rep = initTree(path)
-
-for i in rep:
-	printRep(i[1],i[3],i[0])
-
+tree,rep,dirs = initTree(path)
 
 wm = pyinotify.WatchManager()
 mask = pyinotify.IN_CREATE | pyinotify.IN_DELETE #| pyinotify.IN_MODIFY | pyinotify.IN_DELETE
 
-
-queue = []
-handler = EventHandler(queue)
+handler = EventHandler(tree)
 notifier = pyinotify.Notifier(wm, handler)
 wdd = wm.add_watch(path, mask, rec=True)
 
-
-#for d in dirs:  para añadir varios directorios
-#	wm.add_watch(d, mask)
-
 def process(notifier):
-	#deberia poder procesar los eventos, obteniendo los datos
 	if(notifier.check_events()):
 		print("Nuevo evento")
-		if len(queue) != 0:
-			print(queue.pop(0))
-	#	notifier.read_events()
-	#	notifier.process_events()
-	#	print(notifier.read_events())
 	return None #para que el loop no termine
-notifier.loop(callback=process) #investigar, si retorna true, el loop termina
+
+notifier.loop(callback=None) #investigar, si retorna true, el loop termina
 # - Functor called after each event processing iteration
