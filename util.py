@@ -52,14 +52,9 @@ def initTree(path):
 	for j in dirs:
 		files = files + getFiles(j)
 
-	rep = []
-
 	for i in files:
 		state = tree.insert(getHash(i),i)
 		if state != None:
-			rep.append(state)
+			printRep(state[1],state[2],state[0])
 
-	for i in rep:
-		printRep(i[1],i[2],i[0])
-
-	return tree,rep,dirs
+	return tree

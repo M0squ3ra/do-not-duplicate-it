@@ -7,14 +7,16 @@ from util import *
 
 path = "/home/lol/Escritorio/do-not-duplicate-it/pruebas"
 
-tree,rep,dirs = initTree(path)
+tree = initTree(path)
 
 wm = pyinotify.WatchManager()
-mask = pyinotify.IN_CREATE | pyinotify.IN_DELETE 
+mask = pyinotify.IN_CREATE | pyinotify.IN_DELETE
 
-handler = EventHandler(tree,rep)
+handler = EventHandler(tree)
 notifier = pyinotify.Notifier(wm, handler)
 wdd = wm.add_watch(path, mask, rec=True)
+
+#problema: si se agregan carpetas durante la ejecucion, este no las agrega al watch
 
 def process(notifier):
 	if(notifier.check_events()):
