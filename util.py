@@ -1,7 +1,7 @@
 from hashlib import md5
 from os import listdir
 from os.path import isdir,isfile
-from htfiles import HTFiles
+
 
 def printRep(parent,copy,hash):
 	print("[**] Duplicated file detected: \n" +
@@ -42,19 +42,3 @@ def getFiles(path):
 			files.append(path + "/" + i)
 
 	return files
-
-def initTree(path):
-	tree = HTFiles()
-	dirs = getDirs(path)
-	dirs = [path] + dirs
-	files = []
-
-	for j in dirs:
-		files = files + getFiles(j)
-
-	for i in files:
-		state = tree.insert(getHash(i),i)
-		if state != None:
-			printRep(state[1],state[2],state[0])
-
-	return tree
