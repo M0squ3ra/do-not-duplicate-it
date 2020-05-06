@@ -10,20 +10,20 @@ class HTFiles:
 		self.repH = dict() #key = hash
 
 	def insert(self,hash,path):
-		value = self.dictH.get(hash)
-		if value == None:
-			self.dictH[hash] = path
-			self.dictP[path] = hash
-			return None
-		else:
-			self.repP[path] = hash
-			self.repH[hash] = path
-			return hash,value,path
+		if isdir(path) != True:
+			value = self.dictH.get(hash)
+			if value == None:
+				self.dictH[hash] = path
+				self.dictP[path] = hash
+				return None
+			else:
+				self.repP[path] = hash
+				self.repH[hash] = path
+				return hash,value,path
 
 	def modify(self,path):
 		if isdir(path) != True:
 			newHash = getHash(path)
-			#if newHash != self.dictP[path]: design problems
 			self.remove(path)
 			state = self.insert(newHash,path)
 			return state
@@ -32,7 +32,16 @@ class HTFiles:
 
 	def move(self,oldP,newP):
 		if isdir(newP) != True:
-			print("movido")
+			hash = self.dictP.get(oldP)
+			if hash != None:
+				self.dictP.pop(oldP)
+				self.dictP[newP] = hash
+				self.dictH[hash] = newP
+			else:
+				hash = self.repP.get(oldP)
+				self.repP.pop(oldP)
+				self.repP[newP] = hash
+				self.repH[hash] = newP
 
 
 

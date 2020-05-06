@@ -18,10 +18,10 @@ def getHash(file):
 		return hashmd5.hexdigest()
 	except Exception as e:
 		print("Error: %s" % (e))
-		return ""
+		return None
 	except:
 		print("Unknown error")
-		return ""
+		return None
 
 
 def getDirs(path):
