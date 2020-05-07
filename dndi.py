@@ -4,9 +4,10 @@ import pyinotify
 from event_handler import EventHandler
 from util import *
 from inittree import initTree
+import sys
 
 
-path = "/home/lol/Escritorio/do-not-duplicate-it/pruebas"
+path = sys.argv[1]
 
 tree = initTree(path)
 
