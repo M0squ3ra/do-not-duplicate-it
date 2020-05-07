@@ -17,14 +17,9 @@ handler = EventHandler(tree)
 notifier = pyinotify.Notifier(wm, handler)
 wdd = wm.add_watch(path, mask, rec=True)
 
-#problema: si se agregan carpetas durante la ejecucion, este no las agrega al watch
-#posible solucion: que el loop este adentro de un while
-# y que en el callback se detecte que es una carpeta y se pare el loop
-
-
 def process(notifier):
 	if(notifier.check_events()):
-		print("Nuevo evento")
+		wm.add_watch(path,mask,rec=True)
 	return None
 
-notifier.loop(callback=None)
+notifier.loop(callback=process)
