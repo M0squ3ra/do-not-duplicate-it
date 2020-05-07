@@ -9,7 +9,7 @@ class EventHandler(pyinotify.ProcessEvent):
 
 	def process_IN_CREATE(self, event):
 		if isdir(event.pathname):
-			print("es una carpeta")
+			print("New folder:", event.pathname)
 		else:
 			state = self.tree.insert(getHash(event.pathname),event.pathname)
 			if state != None:
@@ -20,7 +20,7 @@ class EventHandler(pyinotify.ProcessEvent):
 		self.tree.remove(event.pathname)
 
 	def process_IN_MODIFY(self, event):
-		print("Modificado: ", event.pathname)
+		print("Modified:", event.pathname)
 		state = self.tree.modify(event.pathname)
 		if state != None:
 			printRep(state[1],state[2],state[0])

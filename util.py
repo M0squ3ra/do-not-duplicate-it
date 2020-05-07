@@ -4,10 +4,10 @@ from os.path import isdir,isfile
 
 
 def printRep(parent,copy,hash):
-	print("[**] Duplicated file detected: \n" +
-		"Old: "+ parent + "\n" +
-		"New: " + copy + "\n" +
-		 "Hash: " + hash + "\n")
+	print("[**]Duplicated file detected: \n" +
+		  "     Old: "+ parent + "\n" +
+		  "     New: " + copy + "\n" +
+		  "     Hash: " + hash + "\n")
 
 def getHash(file):
 	try:
